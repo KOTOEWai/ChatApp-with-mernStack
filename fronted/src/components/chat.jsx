@@ -10,7 +10,7 @@ import telephone from '../assets/telephone.png';
 import video from '../assets/play.png';
 import Icon from '../assets/letter-i.png';
 import { io } from 'socket.io-client';
-const socket = io("http://localhost:3000");
+const socket = io(`${import.meta.env.VITE_BASE_URL}`);
 const ChatInterface = () => {
     const [user, setUser] = useState([]);
     const [singleUser, setSingleUser] = useState({});
@@ -25,7 +25,7 @@ const ChatInterface = () => {
    useEffect(() => {
       const getUsers = async () => {
         try {
-          const res = await fetch('http://localhost:3000/user/getUser');
+          const res = await fetch(`${import.meta.env.VITE_BASE_URL}/user/getUser`);
           const data = await res.json();
           const users = data.filter((user)=> user._id != LogginUserId)
           setUser(users);
@@ -40,7 +40,7 @@ const ChatInterface = () => {
       if (!id) return;
       const getSingleUser = async () => {
         try {
-          const res = await fetch(`http://localhost:3000/user/getSingleUser/${id}`);
+          const res = await fetch(`${import.meta.env.VITE_BASE_URL}/user/getSingleUser/${id}`);
           const data = await res.json();
           setSingleUser(data);
         } catch (error) {
@@ -69,7 +69,7 @@ const ChatInterface = () => {
 
       // Optionally, save message to the database
       await axios.post(
-        `http://localhost:3000/message/sendMessage/${singleUser._id}`,
+        `${import.meta.env.VITE_BASE_URL}/message/sendMessage/${singleUser._id}`,
         { message: formData.message },
         { withCredentials: true },
       );
@@ -96,7 +96,7 @@ const ChatInterface = () => {
   useEffect(() => {
    const getMessage = async () => {
       try {
-        const res = await axios.get(`http://localhost:3000/message/getMessage/${id}`,{
+        const res = await axios.get(`${import.meta.env.VITE_BASE_URL}/message/getMessage/${id}`,{
           withCredentials: true,
         });
       
@@ -111,7 +111,7 @@ const ChatInterface = () => {
 
   useEffect(()=>{
     const logginUser = async () => {
-     const res = await axios.get('http://localhost:3000/user/secure',
+     const res = await axios.get(`${import.meta.env.VITE_BASE_URL}/user/secure`,
       { withCredentials: true }
     )
     setLogginId(res.data._id)
@@ -121,7 +121,7 @@ const ChatInterface = () => {
   },[])
   return (
     <>
-<div className="flex   justify-center items-center dark:bg-gray-950">
+<div className="flex items-center justify-center dark:bg-gray-950">
 <div className=" p-4 md:w-[20%] h-screen overflow-y-auto bg-gray-50">
   {/* Search Section */}
   <div className="relative flex justify-center mb-6">
@@ -129,13 +129,13 @@ const ChatInterface = () => {
       type="search"
       name="search"
       placeholder="Search users..."
-      className="bg-white w-full max-w-md h-12 px-4 pr-12 rounded-full text-sm focus:outline-none shadow-md"
+      className="w-full h-12 max-w-md px-4 pr-12 text-sm bg-white rounded-full shadow-md focus:outline-none"
     />
-    <button type="submit" className="absolute right-0 top-0 mt-2 mr-6">
+    <button type="submit" className="absolute top-0 right-0 mt-2 mr-6">
       <img
         src={search}
         alt="Search Icon"
-        className="w-8 h-8 rounded-full hover:bg-gray-100 p-1"
+        className="w-8 h-8 p-1 rounded-full hover:bg-gray-100"
       />
     </button>
   </div>
@@ -154,8 +154,8 @@ const ChatInterface = () => {
       >
         {/* User Picture */}
         <img
-          src={`http://localhost:3000/uploads/${user.pic}`}
-          className="w-12 h-12 rounded-full mr-4"
+          src={`${import.meta.env.VITE_BASE_URL}/uploads/${user.pic}`}
+          className="w-12 h-12 mr-4 rounded-full"
           alt="User"
         />
         {/* User Name */}
@@ -169,24 +169,24 @@ const ChatInterface = () => {
 <div className="flex flex-col h-screen w-[60%]  bg-gray-50 shadow-xl ">
 
 { id ?
-      <div className="flex items-center justify-between px-6 py-4 border-b  border-gray-200 bg-white rounded-t-lg">
+      <div className="flex items-center justify-between px-6 py-4 bg-white border-b border-gray-200 rounded-t-lg">
        
        
         <div  className="flex items-center space-x-4">
           <img
-            src={`http://localhost:3000/uploads/${singleUser.pic}`}
+            src={`${import.meta.env.VITE_BASE_URL}/uploads/${singleUser.pic}`}
             alt="Profile"
-            className="w-10 h-10 rounded-full object-cover"
+            className="object-cover w-10 h-10 rounded-full"
           />
           <div>
             <h2 className="text-lg font-semibold text-gray-800">{singleUser.name}</h2>
             <div className="flex items-center space-x-2">
-              <BsCircleFill className="text-green-500 w-2 h-2" />
+              <BsCircleFill className="w-2 h-2 text-green-500" />
               <span className="text-sm text-gray-600">Online</span>
             </div>
           </div>
         </div>
-        <div className="flex justify-center items-center gap-3 cursor-pointer">
+        <div className="flex items-center justify-center gap-3 cursor-pointer">
          <img src={telephone} alt="" className="w-8 h-8" /> 
          <img src={video} alt="" className="w-10 h-10" /> 
          <img src={Icon} alt="" className="w-8 h-9" /> 
@@ -196,7 +196,7 @@ const ChatInterface = () => {
 
       { !id ? <div>
         <img src={messageLogo} alt="" className="" />
-      </div> : <div className="flex-1 overflow-y-auto p-3 space-y-4">
+      </div> : <div className="flex-1 p-3 space-y-4 overflow-y-auto">
       {message.map((msg, i) => (
                 <div
                   key={i}
@@ -205,11 +205,11 @@ const ChatInterface = () => {
                   }`}
                 >
                     { msg.receiver !== singleUser._id ?
-                  <img  src={`http://localhost:3000/uploads/${singleUser.pic}`} alt=""  className="w-4 h-4 rounded-full object-cover mt-4" /> : ''
+                  <img  src={`${import.meta.env.VITE_BASE_URL}/uploads/${singleUser.pic}`} alt=""  className="object-cover w-4 h-4 mt-4 rounded-full" /> : ''
                     }
                   <div className={`rounded-lg px-2 py-2 max-w-[80%] ${msg.receiver === singleUser._id ? 'bg-blue-200' : 'bg-gray-100'}`}>
                     <p className="text-lg">{  msg.content } </p> 
-                    <div className="text-right text-xs text-gray-500">
+                    <div className="text-xs text-right text-gray-500">
                     {new Date(msg.createdAt || Date.now()).toLocaleTimeString([], {
     hour: "2-digit",
     minute: "2-digit",
@@ -226,10 +226,10 @@ const ChatInterface = () => {
         <div />
       </div>
 }
-      <div className="px-6 py-4 bg-white border-t  border-gray-200 rounded-b-lg">
+      <div className="px-6 py-4 bg-white border-t border-gray-200 rounded-b-lg">
 
      <div className="flex space-x-4 ">
-        <form onSubmit={handleSubmit} className="flex items-center space-x-2 w-full">
+        <form onSubmit={handleSubmit} className="flex items-center w-full space-x-2">
   <input
     id="message"
     name="message"
@@ -241,7 +241,7 @@ const ChatInterface = () => {
   />
   <button
     type="submit"
-    className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-colors duration-200"
+    className="px-4 py-2 text-white transition-colors duration-200 bg-blue-500 rounded-lg hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
   >
     <FiSend className="w-5 h-5" />
   </button>

@@ -18,7 +18,7 @@ const AuthProvider = ({children}) =>{
     user:null
    })
 useEffect(() => {
-        axios.get('http://localhost:3000/user/secure/',{
+        axios.get(`${import.meta.env.VITE_BASE_URL}/user/secure/`,{
             withCredentials:true
         }).then((res)=>{
             if(res.data){

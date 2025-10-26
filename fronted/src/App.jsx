@@ -8,6 +8,7 @@ export default function App() {
   const { user } = useContext(AuthContext)
   return (
     <Routes>
+      <Route path='/' element = {<Chat/>} />
       <Route path='/chat' element = { user ? <Chat/> : <Login/> } />
       <Route path='/chat/:id' element = {user ? <Chat /> : <Login />} />
       <Route path='/login' element = {<Login />}/>
