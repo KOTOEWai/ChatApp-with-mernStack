@@ -31,7 +31,7 @@ const server = http.createServer(app);
 // Set up Socket.io with CORS
 const io = new Server(server, {
     cors: {
-        origin: "http://localhost:5173", // Your frontend URL
+        origin: "http://localhost:5173" || "https://mern-chat-6sdd.onrender.com/", // Your frontend URL
         credentials: true,
     }
 });
@@ -39,7 +39,7 @@ const io = new Server(server, {
 
 
 app.use(cors({
-    origin: "http://localhost:5173 " ,
+    origin: "http://localhost:5173 " || "https://mern-chat-6sdd.onrender.com/" ,
     credentials: true,
     methods: ["GET", "POST", "PUT", "DELETE"],
 }));
