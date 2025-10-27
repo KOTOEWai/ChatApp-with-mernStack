@@ -8,11 +8,8 @@ const uploadFields = upload.fields([
     { name: 'pic', maxCount: 2}
 ])
 
-
 router.post('/SignIn',Usercontroller.SignIn);
-
 router.post('/SignUp',uploadFields,Usercontroller.SignUp);
-
 router.get('/getUser',Usercontroller.getall);
 router.get('/getSingleUser/:id',Usercontroller.getuser)
 router.get('/secure',protectRoute,Usercontroller.me)

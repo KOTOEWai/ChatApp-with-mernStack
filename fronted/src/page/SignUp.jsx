@@ -2,7 +2,7 @@ import { useForm } from 'react-hook-form';
 import axios from 'axios';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-
+import {ToastContainer, toast} from 'react-toastify';
 export default function SignUp() {
   const { register, handleSubmit, formState: { errors } } = useForm();
   const navigate = useNavigate();
@@ -29,7 +29,17 @@ export default function SignUp() {
       await axios.post(`${import.meta.env.VITE_BASE_URL}/user/SignUp`, formData, {
         withCredentials: true,
       });
-      alert('Sign up successful!');
+
+      toast.success('Register successful!', {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+      });
       navigate('/login');
     } catch (err) {
       console.error('Error during signup:', err);
@@ -39,6 +49,7 @@ export default function SignUp() {
 
   return (
     <div className="flex items-center justify-center h-screen dark:bg-gray-950">
+      <ToastContainer/>
       <div className="font-[sans-serif] bg-white w-[60%] dark:bg-gray-950">
         <div className="grid items-center h-full gap-8 md:grid-cols-2">
           <div className="p-4 max-md:order-1">
@@ -85,14 +96,17 @@ export default function SignUp() {
 
               {/* Profile Picture */}
               <div className="mt-8">
-                <label className="block mb-2 text-xs text-white">Profile Picture</label>
-                <input
-                  name="pic"
-                  type="file"
-                  id="pic"
-                  onChange={handleFileChange}
-                  className="w-full px-2 py-3 text-sm text-white bg-transparent border-b border-gray-300 outline-none focus:border-yellow-400"
-                />
+                <label htmlFor="pic" className="block mb-2 text-xs text-white">
+               Profile Picture
+              </label>
+              <input
+              id="pic"
+              name="pic"
+              type="file"
+              onChange={handleFileChange}
+                className="w-full px-2 py-3 text-sm text-white bg-transparent border-b border-gray-300 outline-none focus:border-yellow-400"
+             />
+
                 {errors.pic && <span className="text-red-500">{errors.pic.message}</span>}
               </div>
 

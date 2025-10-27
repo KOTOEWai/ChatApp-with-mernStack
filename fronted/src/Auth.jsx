@@ -15,8 +15,7 @@ const Reducer= (state,action) => {
 }
 const AuthProvider = ({children}) =>{
    const [state,dispatch] = useReducer(Reducer,{
-    user:null
-   })
+    user:null })
 useEffect(() => {
         axios.get(`${import.meta.env.VITE_BASE_URL}/user/secure/`,{
             withCredentials:true
@@ -33,14 +32,15 @@ useEffect(() => {
             }
         })
 })
+
 useEffect(()=>{
     if(state.user){
         localStorage.setItem('user', JSON.stringify(state.user));
-
     }else{
         localStorage.removeItem('user');
     }
 },[state.user]);
+
     return (
         <AuthContext.Provider value={{...state,dispatch}} >
             {children}

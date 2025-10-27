@@ -1,7 +1,7 @@
 import { Route,Routes } from 'react-router-dom'
-import Login from './components/login.jsx'
-import Chat from './components/chat.jsx'
-import SignUp from './components/singUp.jsx'
+import Chat from './page/chat.jsx'
+import Login from './page/login.jsx'
+import SignUp from './page/SignUp.jsx'
 import { AuthContext } from './Auth.jsx'
 import { useContext } from 'react'
 export default function App() {

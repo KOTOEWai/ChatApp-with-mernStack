@@ -11,9 +11,19 @@ const path = require('path');
 dotenv.config();
 
 // Connect to MongoDB
-mongoose.connect(process.env.MONGODB_URI, { autoIndex: true })
-    .then(() => console.log('Connected to MongoDB'))
-    .catch((err) => console.log('MongoDB connection error:', err));
+  const connectDB = async () => {
+      try {
+        await mongoose.connect(process.env.MONGODB_URI, {
+          useNewUrlParser: true, // Recommended for new connections
+          useUnifiedTopology: true, // Recommended for new connections
+        });
+        console.log('MongoDB connected successfully!');
+      } catch (error) {
+        console.error('MongoDB connection error:', error.message);
+        process.exit(1); // Exit process with failure
+      }
+    };
+connectDB();
 
 const app = express();
 const server = http.createServer(app);
@@ -34,27 +44,16 @@ app.use(cors({
     methods: ["GET", "POST", "PUT", "DELETE"],
 }));
 app.use(express.json());
+app.use(cookieParser());
 
 
 
 io.on('connection', (socket) => {
-    console.log('User connected:', socket.id);
     socket.on('Message', (message) => {
       io.emit('receiveMessage', message);
     });
-    console.log('User disconnected:', socket.id);
   });
 
-
-
-// Middleware
-app.use(cors({
-    origin: "http://localhost:5173", // Your frontend URL
-    credentials: true,
-    methods: ["GET", "POST", "PUT", "DELETE"],
-}));
-app.use(express.json());
-app.use(cookieParser());
 
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 

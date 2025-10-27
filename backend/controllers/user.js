@@ -58,8 +58,7 @@ exports.SignUp = asyncHandler (async (req, res) => {
     }
 });
 
-exports.SignIn = async (req, res) => {
-    console.log(req.body);  
+exports.SignIn = async (req, res) => { 
     try {
         const { email, password } = req.body;
         // Validate input
