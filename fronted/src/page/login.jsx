@@ -13,7 +13,6 @@ export default function Login() {
           });
           localStorage.setItem("chat-user", JSON.stringify(data));
           localStorage.setItem("token", JSON.stringify(response.data.token));
-       
           toast.success('Login successful!', {
               position: "top-right",
               autoClose: 5000,
